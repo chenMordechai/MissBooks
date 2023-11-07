@@ -1,0 +1,10 @@
+.review-add {
+    background-color: var(--clr2);
+    padding: 10px;
+}
+
+.review-add form {
+    display: grid;
+    grid-template-columns: 100px 200px;
+    gap: 10px;
+}

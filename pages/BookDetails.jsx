@@ -1,5 +1,8 @@
 import { LongTxt } from "../cmps/LongTxt.jsx"
+import { ReviewAdd } from "../cmps/ReviewAdd.jsx"
+import { ReviewList } from "../cmps/ReviewList.jsx"
 import { bookService } from "../services/book.service.js"
+import {eventBusService} from "../services/event-bus.service.js"
 
 const { useState, useEffect } = React
 const { useParams, useNavigate, Link } = ReactRouterDOM
@@ -26,7 +29,6 @@ export function BookDetails() {
 
     function getTextByDate() {
         const currYear = (new Date).getFullYear()
-        console.log('currYear:', currYear)
         if (book.publishedDate < currYear - 10) return 'Vintage'
         else if (book.publishedDate > currYear - 1) return 'New'
     }
@@ -34,6 +36,25 @@ export function BookDetails() {
     function getClassByPrice() {
         if (book.listPrice.amount > 150) return 'red'
         else if (book.listPrice.amount < 20) return 'green'
+    }
+
+    function onRemoveReview(reviewId){
+        bookService.removeReview(book.id,reviewId)
+        .then((newBook)=>{
+                setBook(newBook)
+            })
+    }
+
+    function onAddReview(review){
+        bookService.addReview(book.id,review)
+        .then((newBook)=>{
+            eventBusService.emit('user-msg' ,{txt:'Save review', type:'success'})
+            setBook(newBook)
+        })
+        .catch(err=>{
+            eventBusService.emit('user-msg' ,{txt:'Failed saving review', type:'error'})
+            console.log('err:', err)
+        })
     }
 
 
@@ -51,7 +72,8 @@ export function BookDetails() {
             <h3>{getTextByPageCount()}</h3>
             <h3>{getTextByDate()}</h3>
             <img src={book.thumbnail} />
-
+            <ReviewList reviews={book.reviews} onRemoveReview={onRemoveReview}/>
+            <ReviewAdd onAddReview={onAddReview}/>
         </section>
     )
 }

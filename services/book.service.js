@@ -457,7 +457,9 @@ export const bookService = {
     getEmptyBook,
     getNextBookId,
     getFilterBy,
-    setFilterBy
+    setFilterBy,
+    addReview,
+    removeReview
 }
 
 function query(filterBy = {}) {
@@ -486,12 +488,30 @@ function remove(bookId) {
     return storageService.remove(BOOK_KEY, bookId)
 }
 
+function removeReview(bookId,reviewId){
+    return get(bookId).then(book => {
+        const reviewIdx = book.reviews.findIndex(review => review.id === reviewId)
+        book.reviews.splice(reviewIdx,1)
+        console.log('book after removing review:', book)
+       return save(book)
+    })
+}
+
 function save(book) {
     if (book.id) {
         return storageService.put(BOOK_KEY, book)
     } else {
         return storageService.post(BOOK_KEY, book)
     }
+}
+
+function addReview( bookId ,review){
+    review.id = utilService.makeId()
+   return get(bookId).then(book => {
+        book.reviews.push(review)
+        console.log('book after adding review:', book)
+       return save(book)
+    })
 }
 
 function getEmptyBook(title = '', price = 0) {
@@ -544,6 +564,7 @@ function _createBooks() {
         // console.log('gBooks:', gBooks)
         books = gBooks
         // console.log('books:', books)
+        books.forEach(book => book.reviews = [] )
         utilService.saveToStorage(BOOK_KEY, books)
     }
 }
