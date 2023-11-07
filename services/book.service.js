@@ -479,7 +479,6 @@ function query(filterBy = {}) {
 }
 
 function get(bookId) {
-    console.log('bookId:', bookId)
     return storageService.get(BOOK_KEY, bookId)
 }
 
@@ -495,8 +494,28 @@ function save(book) {
     }
 }
 
-function getEmptyBook(title = '', maxPrice = 0) {
-    return { id: '', title, price }
+function getEmptyBook(title = '', price = 0) {
+    return  {
+        "title": "",
+        "subtitle": "mi est eros convallis auctor arcu dapibus himenaeos",
+        "authors": [
+            "Barbara Cartland"
+        ],
+        "publishedDate": 1999,
+        "description": "placerat nisi sodales suscipit tellus tincidunt mauris elit sit luctus interdum ad dictum platea vehicula conubia fermentum habitasse congue suspendisse",
+        "pageCount": 713,
+        "categories": [
+            "Computers",
+            "Hack"
+        ],
+        "thumbnail": "http://coding-academy.org/books-photos/20.jpg",
+        "language": "en",
+        "listPrice": {
+            "amount": 0,
+            "currencyCode": "EUR",
+            "isOnSale": false
+        }
+    }
 }
 
 function getFilterBy() {

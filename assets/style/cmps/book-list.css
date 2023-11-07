@@ -6,7 +6,7 @@
 
 .book-list li {
     background-color: var(--clr1bg);
-    width: 200px;
+    width: 250px;
     padding: 10px;
     list-style: none;
 }

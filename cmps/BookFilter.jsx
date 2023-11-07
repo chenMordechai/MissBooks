@@ -36,14 +36,13 @@ export function BookFilter({ filterBy, onSetFilter }) {
     function onSubmitFilter(ev) {
         ev.preventDefault()
         onSetFilter(filterByToEdit)
-
     }
 
     return (
-        <form onSubmit={onSubmitFilter}>
+        <form onSubmit={onSubmitFilter} className="book-filter">
             <label htmlFor="title">Title</label>
             <input value={filterByToEdit.title} onChange={onHandleChange} type="text" id="title" name="title" placeholder="By Title" />
-            <br />
+           
             <label htmlFor="price">Max Price</label>
             <input value={filterByToEdit.maxPrice} onChange={onHandleChange} type="number" id="maxPrice" name="maxPrice" placeholder="By Max Price" />
 

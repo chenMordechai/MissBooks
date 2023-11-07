@@ -2,13 +2,15 @@ import { bookService } from '../services/book.service.js'
 import { BookList } from '../cmps/BookList.jsx'
 import { BookFilter } from '../cmps/BookFilter.jsx'
 import { BookDetails } from './BookDetails.jsx'
+import {eventBusService} from "../services/event-bus.service.js"
+
 
 const { useState, useEffect } = React
+const {Link} = ReactRouterDOM
 
 export function BookIndex() {
 
     const [books, setBooks] = useState(null)
-    const [selectedBookId, setSelectedBookId] = useState(null)
     const [filterBy, setFilterBy] = useState(bookService.getFilterBy())
 
     useEffect(() => {
@@ -17,14 +19,15 @@ export function BookIndex() {
 
 
     function onRemoveBook(bookId) {
-        bookService.remove(bookId).then(() => {
-            setBooks(books => books.filter(book => book.id !== bookId))
-        })
-
-    }
-
-    function onSelectBookId(bookId) {
-        setSelectedBookId(bookId)
+        bookService.remove(bookId )
+            .then(() => {
+                 setBooks(books => books.filter(book => book.id !== bookId))
+                 eventBusService.emit('user-msg', {txt:'Removed book'+ bookId , type:'success'})
+                })
+                .catch(err => {
+                    console.log('err:', err)
+                    eventBusService.emit('user-msg', {txt:'Failed removing book'+ bookId , type:'error'})
+                })
     }
 
     function onSetFilter(filter) {
@@ -35,11 +38,9 @@ export function BookIndex() {
     if (!books) return <div>Loading...</div>
     return (
         <section>
-            {!selectedBookId && <React.Fragment>
                 <BookFilter filterBy={filterBy} onSetFilter={onSetFilter} />
-                <BookList books={books} onRemoveBook={onRemoveBook} onSelectBookId={onSelectBookId} />
-            </React.Fragment>}
-            {selectedBookId && <BookDetails bookId={selectedBookId} onSelectBookId={onSelectBookId} />}
+                <button><Link to="/book/edit">Add Book</Link></button>
+                <BookList books={books} onRemoveBook={onRemoveBook} />
         </section>
     )
 }

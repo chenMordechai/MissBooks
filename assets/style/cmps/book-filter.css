@@ -1,0 +1,22 @@
+.book-filter {
+    background-color: var(--clr2);
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 10px;
+
+    font-size: 1.2rem;
+    width: 100%;
+    padding: 30px;
+}
+
+.book-filter input {
+    padding: 6px;
+    border-radius: 7px;
+    border: none;
+}
+
+.book-filter button {
+    grid-column: 1/-1;
+    margin: 0;
+}

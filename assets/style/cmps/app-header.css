@@ -1,12 +1,18 @@
 .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   background-color: var(--clr1);
   color: var(--clr1bg);
   padding: 1em;
 }
 
 .app-header a {
-  margin: 20px;
+  /* margin: 20px; */
   cursor: pointer;
+  margin-inline-start: 10px;
+  font-family: cursive;
 }
 
 @media (max-width: 720px) {
